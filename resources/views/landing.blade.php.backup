@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookHaven - Online Bookstore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#3B82F6',
+                        'primary-dark': '#1E40AF',
+                        'secondary': '#64748B',
+                        'accent': '#F1F5F9',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="font-inter bg-white text-slate-900">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-200 z-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-book-open text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-semibold text-slate-900">BookHaven</span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-slate-700 hover:text-primary transition-colors">Home</a>
+                    <a href="#catalog" class="text-slate-700 hover:text-primary transition-colors">Catalog</a>
+                    <a href="{{ route('about') }}" class="text-slate-700 hover:text-primary transition-colors">About</a>
+                    <a href="{{ route('contact') }}" class="text-slate-700 hover:text-primary transition-colors">Contact</a>
+                </div>
+                
+                <!-- Auth Buttons -->
+                <div class="flex items-center space-x-3">
+                    <a href="{{ route('login') }}" 
+                       class="text-slate-700 hover:text-primary transition-colors font-medium">
+                        Sign In
+                    </a>
+                    <a href="{{ route('register') }}" 
+                       class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors font-medium">
+                        Get Started
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-slate-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-24 pb-20 bg-gradient-to-b from-slate-50 to-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+                    Your Digital
+                    <span class="text-primary">Library</span>
+                    Awaits
+                </h1>
+                <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+                    Discover thousands of books, from bestsellers to hidden gems. 
+                    Start your reading journey with us today.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{{ route('register') }}" 
+                       class="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Start Reading
+                    </a>
+                    <a href="#categories" 
+                       class="border border-slate-300 hover:border-primary text-slate-700 hover:text-primary px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-compass mr-2"></i>
+                        Browse Books
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-slate-900 mb-2">10,000+</div>
+                    <div class="text-slate-600">Books Available</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-slate-900 mb-2">5,000+</div>
+                    <div class="text-slate-600">Happy Readers</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-slate-900 mb-2">50+</div>
+                    <div class="text-slate-600">Categories</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="py-20 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-slate-900 mb-4">Book Categories</h2>
+                <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+                    Explore our wide range of book categories and find your next favorite read
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                @forelse($categories as $category)
+                <div class="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow border border-slate-200">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-book text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-900 mb-2">{{ $category->name }}</h3>
+                    <p class="text-slate-600 text-sm">{{ $category->books_count }} books available</p>
+                </div>
+                @empty
+                <div class="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow border border-slate-200">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-book text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-900 mb-2">Fiction</h3>
+                    <p class="text-slate-600 text-sm">Immerse yourself in captivating stories and adventures</p>
+                </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
+    <!-- Book Catalog Section -->
+    <section id="catalog" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-slate-900 mb-4">Latest Books</h2>
+                <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+                    Discover our newest additions and popular titles
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                @forelse($books as $book)
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <!-- Book Cover -->
+                    <div class="aspect-[3/4] bg-slate-100 relative">
+                        @if($book->cover_photo)
+                            <img src="{{ asset('storage/' . $book->cover_photo) }}" 
+                                 alt="{{ $book->judul }}"
+                                 class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center">
+                                <i class="fas fa-book text-slate-400 text-4xl"></i>
+                            </div>
+                        @endif
+                        @if($book->stok > 0)
+                            <span class="absolute top-2 right-2 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                                In Stock
+                            </span>
+                        @else
+                            <span class="absolute top-2 right-2 bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
+                                Out of Stock
+                            </span>
+                        @endif
+                    </div>
+
+                    <!-- Book Info -->
+                    <div class="p-4">
+                        <h3 class="font-bold text-slate-900 mb-2 line-clamp-2">{{ $book->judul }}</h3>
+                        <p class="text-sm text-slate-600 mb-2">by {{ $book->pengarang }}</p>
+                        <p class="text-sm text-slate-500 mb-3">{{ $book->category->name ?? 'Uncategorized' }}</p>
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-lg font-bold text-primary">
+                                Rp {{ number_format($book->harga, 0, ',', '.') }}
+                            </span>
+                            <span class="text-sm text-slate-500">
+                                Stock: {{ $book->stok }}
+                            </span>
+                        </div>
+
+                        <!-- Action Buttons - Requires Login -->
+                        <div class="space-y-2">
+                            <button onclick="showLoginAlert()" 
+                                    class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-colors text-sm font-medium">
+                                <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                            </button>
+                            <button onclick="showLoginAlert()" 
+                                    class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg transition-colors text-sm font-medium">
+                                <i class="fas fa-eye mr-2"></i>View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                @empty
+                <div class="col-span-full text-center py-12">
+                    <i class="fas fa-book text-slate-400 text-6xl mb-4"></i>
+                    <p class="text-slate-600">No books available at the moment.</p>
+                </div>
+                @endforelse
+            </div>
+
+            <!-- View All Button -->
+            @if($books->count() > 0)
+            <div class="text-center mt-12">
+                <a href="{{ route('login') }}" 
+                   class="inline-flex items-center bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login to See More & Shop
+                </a>
+            </div>
+            @endif
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-slate-900 mb-4">Why Choose BookHaven?</h2>
+                <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+                    We make reading accessible, enjoyable, and convenient for everyone
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shipping-fast text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-4">Fast Delivery</h3>
+                    <p class="text-slate-600">Get your books delivered quickly to your doorstep with our reliable shipping partners.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shield-alt text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-4">Secure Payment</h3>
+                    <p class="text-slate-600">Shop with confidence using our secure payment system and data protection.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-headset text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-4">24/7 Support</h3>
+                    <p class="text-slate-600">Our dedicated support team is always ready to help you with any questions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-primary">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-white mb-4">Ready to Start Reading?</h2>
+            <p class="text-xl text-blue-100 mb-8">
+                Join thousands of readers who have made BookHaven their go-to bookstore
+            </p>
+            <a href="{{ route('register') }}" 
+               class="bg-white hover:bg-slate-100 text-primary px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center">
+                <i class="fas fa-user-plus mr-2"></i>
+                Create Your Account
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book-open text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-semibold">BookHaven</span>
+                    </div>
+                    <p class="text-slate-400">Your digital library for discovering amazing books and stories.</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Help</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">Categories</h3>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Fiction</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Education</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Technology</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Romance</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
+                <p>&copy; 2024 BookHaven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Alert Modal -->
+    <div id="loginAlertModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 transform transition-all">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-primary text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">Login Required</h3>
+                <p class="text-slate-600 mb-6">
+                    Please login or create an account to add items to cart and make purchases.
+                </p>
+                <div class="flex gap-3">
+                    <a href="{{ route('login') }}" 
+                       class="flex-1 bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-semibold transition-colors">
+                        Login
+                    </a>
+                    <a href="{{ route('register') }}" 
+                       class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-lg font-semibold transition-colors">
+                        Register
+                    </a>
+                </div>
+                <button onclick="closeLoginAlert()" 
+                        class="mt-4 text-slate-600 hover:text-slate-900 text-sm">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showLoginAlert() {
+            document.getElementById('loginAlertModal').classList.remove('hidden');
+        }
+
+        function closeLoginAlert() {
+            document.getElementById('loginAlertModal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('loginAlertModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLoginAlert();
+            }
+        });
+    </script>
+</body>
+</html>
