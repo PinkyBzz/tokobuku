@@ -35,6 +35,18 @@
                 <div class="bg-white border border-gray-100 rounded-sm p-6">
                     <label class="block text-xs font-medium uppercase tracking-widest text-gray-900 mb-4">Book Cover</label>
                     
+                    <!-- Toggle Source -->
+                    <div class="flex space-x-4 mb-4">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="image_source" value="file" checked class="mr-2" onchange="toggleImageSource('file')">
+                            <span class="text-xs uppercase tracking-widest text-gray-600">Upload File</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="image_source" value="url" class="mr-2" onchange="toggleImageSource('url')">
+                            <span class="text-xs uppercase tracking-widest text-gray-600">Image URL</span>
+                        </label>
+                    </div>
+
                     <div class="mb-4">
                         <img id="preview-img" 
                              src="{{ asset('storage/' . $book->cover_photo) }}" 
@@ -42,13 +54,25 @@
                              class="w-full aspect-[2/3] object-cover border border-gray-100 rounded-sm">
                     </div>
                     
-                    <input type="file" name="cover_photo" id="cover_photo" class="hidden" accept="image/*">
-                    <button type="button" 
-                            onclick="document.getElementById('cover_photo').click()" 
-                            class="w-full bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-3 transition-colors text-xs uppercase tracking-widest border border-gray-200">
-                        Change Cover
-                    </button>
-                    <p class="text-xs text-gray-500 font-light mt-2">PNG, JPG up to 2MB</p>
+                    <!-- File Input Section -->
+                    <div id="file-input-section">
+                        <input type="file" name="cover_photo" id="cover_photo" class="hidden" accept="image/*">
+                        <button type="button" 
+                                onclick="document.getElementById('cover_photo').click()" 
+                                class="w-full bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-3 transition-colors text-xs uppercase tracking-widest border border-gray-200">
+                            Change Cover
+                        </button>
+                        <p class="text-xs text-gray-500 font-light mt-2">PNG, JPG up to 2MB</p>
+                    </div>
+
+                    <!-- URL Input Section -->
+                    <div id="url-input-section" class="hidden">
+                        <input type="url" name="cover_url" id="cover_url" placeholder="https://example.com/image.jpg" 
+                               class="w-full px-4 py-3 bg-white border border-gray-200 text-sm font-light focus:outline-none focus:border-gray-900 transition-all mb-2">
+                        <button type="button" onclick="previewUrl()" class="w-full bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-3 transition-colors text-xs uppercase tracking-widest border border-gray-200">
+                            Preview URL
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -177,6 +201,26 @@
 </div>
 
 <script>
+function toggleImageSource(source) {
+    const fileSection = document.getElementById('file-input-section');
+    const urlSection = document.getElementById('url-input-section');
+    
+    if (source === 'file') {
+        fileSection.classList.remove('hidden');
+        urlSection.classList.add('hidden');
+    } else {
+        fileSection.classList.add('hidden');
+        urlSection.classList.remove('hidden');
+    }
+}
+
+function previewUrl() {
+    const url = document.getElementById('cover_url').value;
+    if (url) {
+        document.getElementById('preview-img').src = url;
+    }
+}
+
 // Image preview
 document.getElementById('cover_photo').addEventListener('change', function(e) {
     const file = e.target.files[0];

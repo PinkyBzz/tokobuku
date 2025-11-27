@@ -102,13 +102,13 @@
         </div>
 
         <!-- Demo Credentials -->
-        <div class="mt-8 bg-gray-50 border border-gray-100 rounded-sm p-6">
+        <!-- <div class="mt-8 bg-gray-50 border border-gray-100 rounded-sm p-6">
             <p class="text-xs font-medium text-gray-900 mb-4 uppercase tracking-wider">Demo Login</p>
             <div class="space-y-2 text-sm text-gray-600 font-light">
                 <p><span class="font-medium">Admin:</span> admin@tokobuku.com / admin123</p>
                 <p><span class="font-medium">User:</span> user@tokobuku.com / user123</p>
             </div>
-        </div>
+        </div> -->
     </div>
 
 </body>

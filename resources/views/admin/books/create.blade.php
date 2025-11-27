@@ -125,20 +125,50 @@
                                     <i class="fas fa-image text-primary mr-2"></i>
                                     Book Cover
                                 </label>
-                                <div class="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
-                                    <div id="image-preview" class="hidden">
-                                        <img id="preview-img" class="max-w-full h-64 mx-auto rounded-lg shadow-lg mb-4 object-cover" />
-                                        <p class="text-sm text-slate-600">Preview</p>
+
+                                <!-- Toggle Source -->
+                                <div class="flex space-x-4 mb-4">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="image_source" value="file" checked class="mr-2 text-primary focus:ring-primary" onchange="toggleImageSource('file')">
+                                        <span class="text-sm text-slate-700">Upload File</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="image_source" value="url" class="mr-2 text-primary focus:ring-primary" onchange="toggleImageSource('url')">
+                                        <span class="text-sm text-slate-700">Image URL</span>
+                                    </label>
+                                </div>
+
+                                <div class="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-primary transition-colors relative">
+                                    <div id="image-preview" class="hidden mb-4">
+                                        <img id="preview-img" class="max-w-full h-64 mx-auto rounded-lg shadow-lg object-cover" />
+                                        <p class="text-sm text-slate-600 mt-2">Preview</p>
                                     </div>
-                                    <div id="upload-placeholder">
-                                        <i class="fas fa-cloud-upload-alt text-5xl text-slate-400 mb-4"></i>
-                                        <p class="text-lg font-semibold text-slate-700 mb-1">Click or drag & drop</p>
-                                        <p class="text-sm text-slate-500">PNG, JPG, GIF up to 2MB</p>
+                                    
+                                    <!-- File Input Section -->
+                                    <div id="file-input-section">
+                                        <div id="upload-placeholder">
+                                            <i class="fas fa-cloud-upload-alt text-5xl text-slate-400 mb-4"></i>
+                                            <p class="text-lg font-semibold text-slate-700 mb-1">Click or drag & drop</p>
+                                            <p class="text-sm text-slate-500">PNG, JPG, GIF up to 2MB</p>
+                                        </div>
+                                        <input type="file" name="cover_photo" id="cover_photo" class="hidden" accept="image/*">
+                                        <button type="button" onclick="document.getElementById('cover_photo').click()" class="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                                            Choose File
+                                        </button>
                                     </div>
-                                    <input type="file" name="cover_photo" id="cover_photo" class="hidden" accept="image/*">
-                                    <button type="button" onclick="document.getElementById('cover_photo').click()" class="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
-                                        Choose File
-                                    </button>
+
+                                    <!-- URL Input Section -->
+                                    <div id="url-input-section" class="hidden">
+                                        <div class="mb-4">
+                                            <i class="fas fa-link text-5xl text-slate-400 mb-4"></i>
+                                            <p class="text-sm text-slate-500 mb-4">Enter the direct URL of the image</p>
+                                        </div>
+                                        <input type="url" name="cover_url" id="cover_url" placeholder="https://example.com/image.jpg" 
+                                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors mb-2">
+                                        <button type="button" onclick="previewUrl()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors w-full">
+                                            Preview URL
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -276,7 +306,40 @@
     </div>
 
     <script>
-        // Image preview
+        function toggleImageSource(source) {
+            const fileSection = document.getElementById('file-input-section');
+            const urlSection = document.getElementById('url-input-section');
+            const preview = document.getElementById('image-preview');
+            const placeholder = document.getElementById('upload-placeholder');
+            
+            if (source === 'file') {
+                fileSection.classList.remove('hidden');
+                urlSection.classList.add('hidden');
+                // Reset preview if switching back to file and no file selected
+                if (!document.getElementById('cover_photo').files.length) {
+                    preview.classList.add('hidden');
+                    placeholder.classList.remove('hidden');
+                }
+            } else {
+                fileSection.classList.add('hidden');
+                urlSection.classList.remove('hidden');
+                // Reset preview if switching to URL and no URL entered
+                if (!document.getElementById('cover_url').value) {
+                    preview.classList.add('hidden');
+                }
+            }
+        }
+
+        function previewUrl() {
+            const url = document.getElementById('cover_url').value;
+            if (url) {
+                document.getElementById('preview-img').src = url;
+                document.getElementById('image-preview').classList.remove('hidden');
+                document.getElementById('upload-placeholder').classList.add('hidden');
+            }
+        }
+
+        // Image preview for file
         document.getElementById('cover_photo').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {

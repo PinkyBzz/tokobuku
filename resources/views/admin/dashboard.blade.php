@@ -105,18 +105,18 @@
             <div class="space-y-3 lg:space-y-4">
                 @forelse($lowStockBooks as $book)
                     <div class="flex items-center gap-3 lg:gap-4 py-3 lg:py-4 border-b border-gray-100 last:border-0">
-                        <img src="{{ asset('storage/' . $book->gambar) }}" alt="{{ $book->judul }}" class="w-10 h-14 lg:w-12 lg:h-16 object-cover border border-gray-100 flex-shrink-0">
+                        <img src="{{ asset('storage/' . $book->cover_photo) }}" alt="{{ $book->judul }}" class="w-10 h-14 lg:w-12 lg:h-16 object-cover border border-gray-100 flex-shrink-0">
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">{{ $book->judul }}</p>
-                            <p class="text-xs text-gray-500 font-light mt-1 truncate">{{ $book->penulis }}</p>
+                            <p class="text-xs text-gray-500 font-light mt-1 truncate">{{ $book->pengarang }}</p>
                         </div>
                         <div class="text-right flex-shrink-0">
                             <span class="inline-block px-2 lg:px-3 py-1 text-[10px] lg:text-xs font-medium rounded-full
-                                @if($book->stock == 0) bg-red-50 text-red-700
-                                @elseif($book->stock <= 5) bg-orange-50 text-orange-700
+                                @if($book->stok == 0) bg-red-50 text-red-700
+                                @elseif($book->stok <= 5) bg-orange-50 text-orange-700
                                 @else bg-yellow-50 text-yellow-700
                                 @endif">
-                                {{ $book->stock }} left
+                                {{ $book->stok }} left
                             </span>
                         </div>
                     </div>

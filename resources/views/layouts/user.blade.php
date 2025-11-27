@@ -31,12 +31,12 @@
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
             <div class="flex justify-between h-16 lg:h-20 items-center">
                 <div class="flex-shrink-0 cursor-pointer">
-                    <a href="{{ route('user.home') }}" class="text-base lg:text-xl font-bold tracking-widest text-gray-900 serif">Z3LF BOOKSTORE.</a>
+                    <a href="{{ route('landing') }}" class="text-base lg:text-xl font-bold tracking-widest text-gray-900 serif">Z3LF BOOKSTORE.</a>
                 </div>
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-6 lg:space-x-10 items-center">
-                    <a href="{{ route('user.home') }}" class="text-xs font-medium uppercase tracking-widest {{ request()->routeIs('user.home') ? 'text-gray-900 border-b border-gray-900 pb-0.5' : 'text-gray-500 hover:text-gray-900' }} transition-colors">Home</a>
+                    <a href="{{ route('landing') }}" class="text-xs font-medium uppercase tracking-widest {{ request()->routeIs('landing') ? 'text-gray-900 border-b border-gray-900 pb-0.5' : 'text-gray-500 hover:text-gray-900' }} transition-colors">Home</a>
                     <a href="{{ route('user.books.index') }}" class="text-xs font-medium uppercase tracking-widest {{ request()->routeIs('user.books.*') ? 'text-gray-900 border-b border-gray-900 pb-0.5' : 'text-gray-500 hover:text-gray-900' }} transition-colors">Catalog</a>
                     <a href="{{ route('about') }}" class="text-xs font-medium uppercase tracking-widest {{ request()->routeIs('about') ? 'text-gray-900 border-b border-gray-900 pb-0.5' : 'text-gray-500 hover:text-gray-900' }} transition-colors">About</a>
                     <a href="{{ route('contact') }}" class="text-xs font-medium uppercase tracking-widest {{ request()->routeIs('contact') ? 'text-gray-900 border-b border-gray-900 pb-0.5' : 'text-gray-500 hover:text-gray-900' }} transition-colors">Contact</a>
@@ -50,6 +50,7 @@
                         @endif
                     </a>
                     <div class="hidden md:block relative group">
+                        @auth
                         <button class="text-gray-400 hover:text-gray-900 transition-colors flex items-center gap-2">
                             <i class="fas fa-user text-lg"></i>
                             <span class="hidden sm:block text-xs font-medium uppercase tracking-widest text-gray-900">{{ Auth::user()->username }}</span>
@@ -62,6 +63,14 @@
                                 </button>
                             </form>
                         </div>
+                        @else
+                        <a href="{{ route('login') }}" class="hidden sm:block text-xs font-medium uppercase tracking-widest text-gray-900 border border-gray-200 px-4 py-2 hover:border-gray-900 transition-colors">
+                            Login
+                        </a>
+                        <a href="{{ route('login') }}" class="sm:hidden text-gray-400 hover:text-gray-900 transition-colors">
+                            <i class="fas fa-user text-lg"></i>
+                        </a>
+                        @endauth
                     </div>
 
                     <!-- Mobile Menu Button -->

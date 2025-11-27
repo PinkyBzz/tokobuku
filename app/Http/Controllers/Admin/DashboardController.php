@@ -71,8 +71,8 @@ class DashboardController extends Controller
             }
             
             // Low stock books
-            $lowStockBooks = Book::where('stock', '<=', 10)
-                ->orderBy('stock')
+            $lowStockBooks = Book::where('stok', '<=', 10)
+                ->orderBy('stok')
                 ->take(5)
                 ->get();
             

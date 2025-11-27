@@ -7,6 +7,8 @@ use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class BookController extends Controller
 {
@@ -54,41 +56,51 @@ class BookController extends Controller
     {
         $request->validate([
             'judul' => 'required|max:255',
-            'penulis' => 'required|max:255',
+            'pengarang' => 'required|max:255',
             'penerbit' => 'required|max:255',
             'tahun_terbit' => 'required|integer|min:1900|max:' . date('Y'),
-            'isbn' => 'required|unique:books,isbn',
-            'jumlah_halaman' => 'required|integer|min:1',
-            'berat' => 'required|numeric|min:0.1',
-            'lebar' => 'required|numeric|min:0.1',
-            'panjang' => 'required|numeric|min:0.1',
+            'isbn' => 'nullable|unique:books,isbn',
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
-            'deskripsi' => 'required',
+            'sinopsis' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cover_url' => 'nullable|url'
         ]);
 
-        $gambarPath = null;
-        if ($request->hasFile('gambar')) {
-            $gambarPath = $request->file('gambar')->store('books', 'public');
+        $coverPath = null;
+        
+        if ($request->hasFile('cover_photo')) {
+            $coverPath = $request->file('cover_photo')->store('books', 'public');
+        } elseif ($request->filled('cover_url')) {
+            try {
+                $url = $request->cover_url;
+                $response = Http::get($url);
+                
+                if ($response->successful()) {
+                    $contents = $response->body();
+                    $name = 'books/' . uniqid() . '.jpg';
+                    Storage::disk('public')->put($name, $contents);
+                    $coverPath = $name;
+                } else {
+                    Log::error('Failed to download image from URL: ' . $url . ' Status: ' . $response->status());
+                }
+            } catch (\Exception $e) {
+                Log::error('Exception downloading image: ' . $e->getMessage());
+            }
         }
 
         Book::create([
             'judul' => $request->judul,
-            'penulis' => $request->penulis,
+            'pengarang' => $request->pengarang,
             'penerbit' => $request->penerbit,
             'tahun_terbit' => $request->tahun_terbit,
             'isbn' => $request->isbn,
-            'jumlah_halaman' => $request->jumlah_halaman,
-            'berat' => $request->berat,
-            'lebar' => $request->lebar,
-            'panjang' => $request->panjang,
             'harga' => $request->harga,
             'stok' => $request->stok,
-            'deskripsi' => $request->deskripsi,
+            'sinopsis' => $request->sinopsis,
             'category_id' => $request->category_id,
-            'gambar' => $gambarPath
+            'cover_photo' => $coverPath
         ]);
 
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil ditambahkan!');
@@ -130,7 +142,8 @@ class BookController extends Controller
             'stok' => 'required|integer|min:0',
             'sinopsis' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cover_url' => 'nullable|url'
         ]);
 
         // Update book data
@@ -150,6 +163,27 @@ class BookController extends Controller
                 Storage::disk('public')->delete($book->cover_photo);
             }
             $book->cover_photo = $request->file('cover_photo')->store('books', 'public');
+        } elseif ($request->filled('cover_url')) {
+             try {
+                $url = $request->cover_url;
+                $response = Http::get($url);
+                
+                if ($response->successful()) {
+                    // Delete old image
+                    if ($book->cover_photo) {
+                        Storage::disk('public')->delete($book->cover_photo);
+                    }
+                    
+                    $contents = $response->body();
+                    $name = 'books/' . uniqid() . '.jpg';
+                    Storage::disk('public')->put($name, $contents);
+                    $book->cover_photo = $name;
+                } else {
+                    Log::error('Failed to download image from URL: ' . $url . ' Status: ' . $response->status());
+                }
+            } catch (\Exception $e) {
+                Log::error('Exception downloading image: ' . $e->getMessage());
+            }
         }
 
         $book->save();
